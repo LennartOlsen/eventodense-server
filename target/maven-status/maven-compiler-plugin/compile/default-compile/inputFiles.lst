@@ -1,0 +1,8 @@
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/controllers/HTTPResponse.java
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/Main.java
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/models/point/Point.java
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/datastore/ISqlRepository.java
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/models/point/PointSqlRepository.java
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/controllers/BaseHTTPController.java
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/controllers/PointsController.java
+/Users/lennartolsen/dev/mobile_systems/EventOdenseServer/src/main/java/net/lennartolsen/eventodense/server/datastore/PostgresHelper.java

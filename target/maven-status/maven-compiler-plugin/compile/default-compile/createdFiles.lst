@@ -1,0 +1,8 @@
+net/lennartolsen/eventodense/server/datastore/ISqlRepository.class
+net/lennartolsen/eventodense/server/controllers/BaseHTTPController.class
+net/lennartolsen/eventodense/server/models/point/PointSqlRepository.class
+net/lennartolsen/eventodense/server/models/point/Point.class
+net/lennartolsen/eventodense/server/Main.class
+net/lennartolsen/eventodense/server/controllers/HTTPResponse.class
+net/lennartolsen/eventodense/server/controllers/PointsController.class
+net/lennartolsen/eventodense/server/datastore/PostgresHelper.class
