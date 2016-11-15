@@ -15,7 +15,7 @@ import static spark.Service.ignite;
  * AND EXECUTE WITH
  * mvn exec:java "-Dexec.mainClass=net.lennartolsen.eventodense.server.Main"
  * Build with DEPS:
- * mvn assembly:assembly -DdescriptorId=jar-with-dependencie
+ * mvn assembly:assembly -DdescriptorId=jar-with-dependencies
  */
 public class Main {
     public static void main(String[] args) {
