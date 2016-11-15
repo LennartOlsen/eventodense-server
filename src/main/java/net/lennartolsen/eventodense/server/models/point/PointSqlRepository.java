@@ -4,7 +4,9 @@ import net.lennartolsen.eventodense.server.datastore.ISqlRepository;
 import net.lennartolsen.eventodense.server.datastore.PostgresHelper;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by lennartolsen on 26/10/2016.
@@ -22,34 +24,6 @@ public class PointSqlRepository implements ISqlRepository {
 
     public void closeConnection(PostgresHelper h) {
         h.closeConnection();
-    }
-
-    private String getInsertBase(){
-        return "INSERT INTO " + getTableName() + " (id, " +
-                "lat, " +
-                "lng, " +
-                "timestamp, " +
-                "accuracy, " +
-                "altitude, " +
-                "eventid, " +
-                "deviceid) VALUES " +
-                "(?,?,?,?,?,?,?,?)";
-    }
-
-    private PreparedStatement prepareSave(Point p, PreparedStatement stmt){
-        try {
-            stmt.setString(1, p.getId());
-            stmt.setDouble(2, p.getLat());
-            stmt.setDouble(3, p.getLng());
-            stmt.setInt(4, p.getTimestamp());
-            stmt.setDouble(5, p.getAccuracy());
-            stmt.setDouble(6, p.getAltitude());
-            stmt.setString(7, p.getEventId());
-            stmt.setString(8, p.getDeviceId());
-        } catch (SQLException e){
-            handleException(e);
-        }
-        return stmt;
     }
 
     public boolean save(Point p){
@@ -85,6 +59,80 @@ public class PointSqlRepository implements ISqlRepository {
         closeConnection(h);
 
         return inserted;
+    }
+
+    public ArrayList<Point> getPoints(int limit, int offset){
+        ArrayList<Point> points = new ArrayList<>();
+        PostgresHelper h = new PostgresHelper();
+        String sql = getSelectBase();
+        sql += limit != 0 ? " LIMIT " + limit: "";
+        sql += offset != 0 ? " OFFSET " + offset: "";
+        PreparedStatement st = h.getPreparedStatement(sql);
+
+        try {
+            ResultSet rs = st.executeQuery();
+
+            while(rs.next()){
+                points.add(buildPoint(rs));
+            }
+            rs.close();
+            st.close();
+
+        } catch (SQLException e){
+            handleException(e);
+            System.exit(0);
+        }
+
+        return points;
+    }
+
+    private String getInsertBase(){
+        return "INSERT INTO " + getTableName() + " (id, " +
+                "lat, " +
+                "lng, " +
+                "timestamp, " +
+                "accuracy, " +
+                "altitude, " +
+                "eventid, " +
+                "deviceid) VALUES " +
+                "(?,?,?,?,?,?,?,?)";
+    }
+
+    private String getSelectBase(){
+        return "SELECT * FROM " + getTableName();
+    }
+
+    private PreparedStatement prepareSave(Point p, PreparedStatement stmt){
+        try {
+            stmt.setString(1, p.getId());
+            stmt.setDouble(2, p.getLat());
+            stmt.setDouble(3, p.getLng());
+            stmt.setInt(4, p.getTimestamp());
+            stmt.setDouble(5, p.getAccuracy());
+            stmt.setDouble(6, p.getAltitude());
+            stmt.setString(7, p.getEventId());
+            stmt.setString(8, p.getDeviceId());
+        } catch (SQLException e){
+            handleException(e);
+        }
+        return stmt;
+    }
+
+    private Point buildPoint(ResultSet rs){
+        Point p = new Point();
+        try {
+            p.setId(rs.getString(1));
+            p.setLat(rs.getDouble(2));
+            p.setLng(rs.getDouble(3));
+            p.setTimestamp(rs.getInt(4));
+            p.setAccuracy(rs.getFloat(5));
+            p.setAltitude(rs.getFloat(6));
+            p.setEventId(rs.getString(7));
+            p.setDeviceId(rs.getString(8));
+        } catch (SQLException e){
+            handleException(e);
+        }
+        return p;
     }
 
     private void handleException(SQLException e){

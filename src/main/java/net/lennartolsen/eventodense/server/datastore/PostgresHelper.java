@@ -77,7 +77,7 @@ public class PostgresHelper {
         try {
             Class.forName("org.postgresql.Driver");
             c = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/EventOdense",
+                    .getConnection("jdbc:postgresql://localhost:5432/eventodense",
                             "eventodense", "123");
         } catch (Exception e) {
             e.printStackTrace();
@@ -89,6 +89,7 @@ public class PostgresHelper {
     private void handleException(SQLException e){
         e.printStackTrace();
         System.err.println(e.getClass().getName()+": "+e.getMessage());
+        System.err.println("Next Exception : " + e.getNextException().getMessage());
         System.exit(0);
     }
 }
