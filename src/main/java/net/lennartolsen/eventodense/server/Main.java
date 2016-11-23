@@ -1,6 +1,6 @@
 package net.lennartolsen.eventodense.server;
 
-import net.lennartolsen.eventodense.server.controllers.HttpController;
+import net.lennartolsen.eventodense.server.controllers.EventsController;
 import net.lennartolsen.eventodense.server.controllers.PointsController;
 import spark.Service;
 
@@ -30,13 +30,15 @@ public class Main {
 
         System.out.println("We are up on port 8080");
 
-        before((request, response) -> {
+        http.before((request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.header("Access-Control-Allow-Methods","POST, PUT, GET, OPTIONS");
+            response.header("Access-Control-Allow-Headers", "Content-Type");
             response.header("Content-Type", "application/json");
         });
 
-        http.options(
-                "/*",
-                (req,res) -> HttpController.options(req, res)
+        http.options("/*",
+                (req,res) -> "OK"
         );
 
         http.get(
@@ -52,9 +54,21 @@ public class Main {
                 (req, res) -> PointsController.post(req, res)
         );
 
-        after((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "*");
-            response.header("Access-Control-Allow-Methods","POST, PUT, GET, OPTIONS");
-        });
+        http.get(
+                "/events",
+                (req, res) -> EventsController.get(req, res)
+        );
+        http.get(
+                "/events/:id",
+                (req, res) -> EventsController.getId(req, res)
+        );
+        http.get(
+                "/events/:id/points",
+                (req, res) -> EventsController.getPoints(req, res)
+        );
+        http.post(
+                "/events",
+                (req, res) -> EventsController.post(req, res)
+        );
     }
 }

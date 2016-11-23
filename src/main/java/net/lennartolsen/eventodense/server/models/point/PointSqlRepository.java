@@ -61,12 +61,20 @@ public class PointSqlRepository implements ISqlRepository {
         return inserted;
     }
 
-    public ArrayList<Point> getPoints(int limit, int offset){
+    public ArrayList<Point> getPoints(int limit, int offset, String eventId){
         ArrayList<Point> points = new ArrayList<>();
         PostgresHelper h = new PostgresHelper();
         String sql = getSelectBase();
-        sql += limit != 0 ? " LIMIT " + limit: "";
-        sql += offset != 0 ? " OFFSET " + offset: "";
+
+        /* TODO : SQL INJECTIONS ARE REAL */
+        System.out.println(eventId);
+        System.out.println(eventId.getClass());
+        if(!eventId.equals("")){
+            sql += " WHERE eventid = \'" + eventId + "\'";
+        }
+        sql += limit != 0 ? " LIMIT " + limit : "";
+        sql += offset != 0 ? " OFFSET " + offset : "";
+        System.out.println(sql);
         PreparedStatement st = h.getPreparedStatement(sql);
 
         try {
@@ -79,8 +87,7 @@ public class PointSqlRepository implements ISqlRepository {
             st.close();
 
         } catch (SQLException e){
-            handleException(e);
-            System.exit(0);
+            gracefullyHandleException(e);
         }
 
         return points;
@@ -139,5 +146,10 @@ public class PointSqlRepository implements ISqlRepository {
         e.printStackTrace();
         System.err.println(e.getClass().getName()+": "+e.getMessage());
         System.exit(0);
+    }
+
+    private void gracefullyHandleException(SQLException e){
+        e.printStackTrace();
+        System.err.println(e.getClass().getName()+": "+e.getMessage());
     }
 }

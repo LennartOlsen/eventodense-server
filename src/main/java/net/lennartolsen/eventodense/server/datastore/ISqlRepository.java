@@ -5,7 +5,6 @@ package net.lennartolsen.eventodense.server.datastore;
  */
 public interface ISqlRepository {
     String getTableName();
-    int getMaxBatchSize();
 
     /**
      * MUST BE CALLED AFTER EVERY INSERT
